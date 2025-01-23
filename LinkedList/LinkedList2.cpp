@@ -1,3 +1,4 @@
+// This code is of Singly Linear LinkedList using C++ and Object Orientation
 #include<iostream>
 using namespace std ;  
 
