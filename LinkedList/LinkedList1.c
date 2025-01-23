@@ -1,3 +1,4 @@
+//This code is of Singly Linear LinkedList
 #include<stdio.h>
 #include<stdlib.h>
 typedef struct node 
