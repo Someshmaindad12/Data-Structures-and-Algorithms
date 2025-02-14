@@ -1,4 +1,7 @@
+// Detect loop
+
 #include<iostream>
+#include<bits/stdc++.h>
 using namespace std;
 
 typedef class Node
@@ -19,28 +22,29 @@ typedef class Node
             this->next = NULL;
         }
 
-} NODE, *PNODE;
+}NODE,*PNODE;
 
 class SinglyLL
 {
     private:
-        PNODE First;
         int iCount;
+        PNODE First;
 
     public:
         SinglyLL();
         ~SinglyLL();
 
-        void InsertFirst(int);
-        void DeleteLast();
         void Display();
         int Count();
 
-        bool CheckElement(int);
+        void InsertLast(int);
+        bool DetectLoop();
 };
 
-SinglyLL::SinglyLL() : First(NULL), iCount(0)
+SinglyLL :: SinglyLL()
 {
+    this->iCount = 0;
+    this->First = NULL;
 }
 
 SinglyLL :: ~SinglyLL()
@@ -55,27 +59,27 @@ SinglyLL :: ~SinglyLL()
     }
 }
 
-void SinglyLL::Display()
+void SinglyLL :: Display()
 {
-    cout << "The elements of the linked list are : \n";
-
     PNODE temp = First;
+
+    cout<<"Elements of the linked list are : \n";
 
     while(temp != NULL)
     {
-        cout << "| " << temp->data << " | -> ";
+        cout<<"| "<<temp->data<<" | -> ";
         temp = temp->next;
     }
 
-    cout << "NULL\n";
+    cout<<"NULL \n";
 }
 
-int SinglyLL::Count()
+int SinglyLL :: Count()
 {
     return iCount;
 }
 
-void SinglyLL::InsertFirst(int iNo)
+void SinglyLL :: InsertLast(int iNo)
 {
     PNODE newn = new NODE(iNo);
 
@@ -83,92 +87,69 @@ void SinglyLL::InsertFirst(int iNo)
     {
         First = newn;
     }
-    else
-    {
-        newn->next = First;
-        First = newn;
-    }
-
-    iCount++;
-}
-
-void SinglyLL::DeleteLast()
-{
-    if(First == NULL)
-    {
-        return;
-    }
-
-    else if(First->next == NULL)
-    {
-        delete First;
-        First = NULL;
-    }
 
     else
     {
         PNODE temp = First;
 
-        while(temp->next->next != NULL)
+        while(temp->next != NULL)
         {
             temp = temp->next;
         }
 
-        delete temp->next;
-        temp->next = NULL;
+        temp->next = newn;
     }
 
-    iCount--;  // Moved outside the conditional blocks
+    iCount++;
 }
 
-bool SinglyLL::CheckElement(int iNo)
+bool SinglyLL :: DetectLoop()
 {
     bool bFlag = false;
-
     PNODE temp = First;
+
+    unordered_map<PNODE,int> mapdata;
 
     while(temp != NULL)
     {
-        if(temp->data == iNo)
+        if(mapdata.find(temp) != mapdata.end())
         {
             bFlag = true;
             break;
         }
 
+        mapdata[temp] = 1;
         temp = temp->next;
-    }
+    } 
 
     return bFlag;
 }
 
+
 int main()
 {
     SinglyLL sobj;
-    int iValue = 0;
     bool bRet = false;
 
-    sobj.InsertFirst(51);
-    sobj.InsertFirst(21);
-    sobj.InsertFirst(11);
-
+    sobj.InsertLast(11);
+    sobj.InsertLast(12);
+    sobj.InsertLast(13);
+    sobj.InsertLast(14);
+    sobj.InsertLast(15);
+    sobj.InsertLast(16);
     sobj.Display();
+    cout<<"Number of elements in the linked list are : "<<sobj.Count()<<endl;
 
-    sobj.DeleteLast();
-    sobj.Display();
-    cout << "Number of elements in the linked list are : " << sobj.Count();
-
-    cout << "\n\nEnter the element that you want to search : ";
-    cin >> iValue;
-
-    bRet = sobj.CheckElement(iValue);
-
+    bRet = sobj.DetectLoop();
+    
     if(bRet == true)
     {
-        cout << "\nElement is present in the linked list\n";
+        cout<<"\nDetect the loop\n\n";
     }
+
     else
     {
-        cout << "\nElement is NOT present in the linked list\n";
+        cout<<"\nNOT detected the loop\n\n";
     }
 
     return 0;
