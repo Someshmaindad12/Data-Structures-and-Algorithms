@@ -1,4 +1,4 @@
-//This code is of Singly Linear LinkedList
+//This code is of Singly Linear LinkedList using C programming language 
 #include<stdio.h>
 #include<stdlib.h>
 typedef struct node 
